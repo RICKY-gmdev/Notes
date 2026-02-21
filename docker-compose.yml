@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  postgres:
+    image: postgres:15
+    container_name: notes-db
+    environment:
+      POSTGRES_DB: ftest1_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build: ./ftest1.Notes.Api
+    container_name: notes-api
+    ports:
+      - "5006:80"
+    depends_on:
+      - postgres
+    environment:
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=ftest1_db;Username=postgres;Password=postgres
+
+  web:
+    build: ./ftest1.Notes.Web
+    container_name: notes-web
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+volumes:
+  pgdata:
