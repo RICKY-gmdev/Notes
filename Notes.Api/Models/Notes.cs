@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace ftest1.Notes.Api.Models
+namespace Notes.Api.Models
 {
     public class Note
     {
