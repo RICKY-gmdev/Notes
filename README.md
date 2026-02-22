@@ -26,3 +26,5 @@ The project follows a decoupled architecture, separating the concerns of data pe
 To launch the entire stack (API, Web, and Database) with a single command:
 ```bash
 docker-compose up --build
+```
+<img width="956" height="959" alt="Screenshot 2026-02-21 110419" src="https://github.com/user-attachments/assets/a789f18f-67b9-4c1f-abe5-dc3eb0209a11" />
