@@ -1,6 +1,6 @@
 //Program.cs
 using Microsoft.EntityFrameworkCore;
-using ftest1.Notes.Api.Data;
+using Notes.Api.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
