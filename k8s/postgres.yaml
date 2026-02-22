@@ -17,11 +17,11 @@ spec:
         image: postgres:15
         env:
         - name: POSTGRES_DB
-          value: f1test_notes
+          value: DB
         - name: POSTGRES_USER
           value: postgres
         - name: POSTGRES_PASSWORD
-          value: Ricky03
+          value: POSTGRE_PASSWORD
         ports:
         - containerPort: 5432
 
