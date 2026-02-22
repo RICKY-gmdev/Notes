@@ -1,10 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using ftest1.Notes.Api.Data;
-using ftest1.Notes.Api.Models;
+using Notes.Api.Data;
+using Notes.Api.Models;
 
 
-namespace ftest1.Notes.Api.Controllers
+namespace Notes.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
