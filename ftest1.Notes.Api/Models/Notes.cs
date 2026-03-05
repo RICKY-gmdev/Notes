@@ -6,6 +6,7 @@ namespace ftest1.Notes.Api.Models
     {
         [Key]
         public Guid Id {get; set;}
+        public Guid UserId {get; set;}
         [Required]
         public String Title {get; set;} = String.Empty;
 

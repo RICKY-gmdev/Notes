@@ -1,13 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using ftest1.Notes.Api.Data;
 using ftest1.Notes.Api.Models;
+using System.Security.Claims;
 
 
 namespace ftest1.Notes.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class NotesController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -15,53 +18,56 @@ namespace ftest1.Notes.Api.Controllers
         {
             _context = context;
         }
-    
-    // GET: api/notes
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<Note>>>GetNotes()
-    {
-        return await _context.Notes.OrderByDescending(n=>n.CreatedAt).ToListAsync();
-    }
+        private Guid GetUserId() => Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-    // GET: api/notes/{id}
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Note>> GetNote(Guid id)
+        // GET: api/notes
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Note>>> GetNotes()
+        {
+            var userId = GetUserId();
+            return await _context.Notes.Where(n => n.UserId == userId).OrderByDescending(n => n.CreatedAt).ToListAsync();
+        }
+
+        // GET: api/notes/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Note>> GetNote(Guid id)
         {
             var note = await _context.Notes.FindAsync(id);
-            if(note == null)
+            if (note == null || note.UserId != GetUserId())
                 return NotFound();
             return note;
         }
-    // POST: api/notes
-    [HttpPost]
-    public async Task<ActionResult<Note>> CreateNote(Note note)
+        // POST: api/notes
+        [HttpPost]
+        public async Task<ActionResult<Note>> CreateNote(Note note)
         {
             note.Id = Guid.NewGuid();
             note.CreatedAt = DateTime.UtcNow;
+            note.UserId = GetUserId();
 
-            _context.Notes.Add(note);await _context.SaveChangesAsync();
+            _context.Notes.Add(note); await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetNote), new {id = note.Id}, note);
+            return CreatedAtAction(nameof(GetNote), new { id = note.Id }, note);
         }
-    // PUT: api/notes/{id}
-    [HttpPut("{id}")]
-    public async Task<ActionResult> UpdateNote(Guid id, Note updatednote)
+        // PUT: api/notes/{id}
+        [HttpPut("{id}")]
+        public async Task<ActionResult> UpdateNote(Guid id, Note updatednote)
         {
-           var existingNote = await _context.Notes.FindAsync(id);
-           if(existingNote == null)
-               return NotFound();
+            var existingNote = await _context.Notes.FindAsync(id);
+            if (existingNote == null || existingNote.UserId != GetUserId())
+                return NotFound();
             existingNote.Title = updatednote.Title;
             existingNote.Content = updatednote.Content;
             existingNote.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
             return NoContent();
         }
-    // DELETE: api/notes/{id}
-    [HttpDelete("{id}")]
-    public async Task<ActionResult>DeleteNote(Guid id)
+        // DELETE: api/notes/{id}
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteNote(Guid id)
         {
             var note = await _context.Notes.FindAsync(id);
-            if(note == null)
+            if (note == null || note.UserId != GetUserId())
                 return NotFound();
             _context.Notes.Remove(note);
             await _context.SaveChangesAsync();
