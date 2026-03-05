@@ -14,5 +14,7 @@ namespace ftest1.Notes.Api.Models
         public DateTime CreatedAt {get;set;} = DateTime.UtcNow;
 
         public DateTime? UpdatedAt {get; set;}
+
+        
     }
 }

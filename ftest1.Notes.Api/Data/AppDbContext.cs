@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using ftest1.Notes.Api.Models;
+using ftest1.Notes.Api.Models.Users;
+
 
 namespace ftest1.Notes.Api.Data
 {
@@ -9,5 +11,6 @@ namespace ftest1.Notes.Api.Data
             :base(options) {}
 
         public DbSet<Note> Notes => Set<Note>();
+        public DbSet<User> Users { get; set; }
     }
 }
