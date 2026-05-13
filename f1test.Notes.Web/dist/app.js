@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-const apiUrl = "https://api.shaidow.me/api/notes";
+const apiUrl = "https://notes-api-ricky-evhsb4ajhphjfwbg.centralindia-01.azurewebsites.net/api/notes";
 function loadNotes() {
     return __awaiter(this, void 0, void 0, function* () {
         const response = yield fetch(apiUrl);
