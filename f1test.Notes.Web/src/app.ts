@@ -1,4 +1,4 @@
-const apiUrl = "https://api.shaidow.me/api/notes";
+const apiUrl = "https://notes-api-ricky-evhsb4ajhphjfwbg.centralindia-01.azurewebsites.net/api/notes";
 
 
 interface Note {
