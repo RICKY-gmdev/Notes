@@ -1,4 +1,3 @@
-//Program.cs
 using Microsoft.EntityFrameworkCore;
 using ftest1.Notes.Api.Data;
 
@@ -11,8 +10,6 @@ var connectionString =
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(connectionString));
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(connectionString));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAll",
@@ -20,27 +17,32 @@ builder.Services.AddCors(options =>
                         .AllowAnyMethod()
                         .AllowAnyHeader());
 });
-
 builder.Services.AddControllers();
-
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
 app.UseCors("AllowAll");
 app.MapControllers();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-// Run migrations automatically on startup
+// Run migrations but don't crash the app if it fails
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.Migrate();
+    try
+    {
+        db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Migration failed — app will still start");
+    }
 }
 
 app.Run();
-
