@@ -24,7 +24,7 @@ A full-stack notes management application built with a modern .NET backend and T
 - **Persistent Storage** — PostgreSQL with Entity Framework Core and migrations
 - **Containerized** — Docker images for both API and frontend
 - **Kubernetes Ready** — K8s manifests for deployment and service exposure
-- **CI Pipeline** — GitHub Actions automatically builds and validates on every push
+- **CI Pipeline** — GitHub Actions automatically builds and validates on every push and pull
 
 ---
 
